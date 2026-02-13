@@ -1,210 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🥔 POTATOHUB 🥔</title>
 
-<style>
-body{
-    margin:0;
-    height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:#05070d;
-    font-family:Arial,Helvetica,sans-serif;
-    color:white;
-}
 
-@keyframes rgb {
-    0%{border-color:red;}
-    20%{border-color:orange;}
-    40%{border-color:yellow;}
-    60%{border-color:lime;}
-    80%{border-color:cyan;}
-    100%{border-color:magenta;}
-}
 
-.box{
-    width:330px;
-    padding:20px;
-    border:3px solid red;
-    border-radius:12px;
-    animation:rgb 4s linear infinite;
-    background:#0b1020;
-    text-align:center;
-    box-shadow:0 0 25px rgba(255,255,255,0.15);
-}
 
-input,button{
-    width:100%;
-    padding:12px;
-    margin-top:10px;
-    border:none;
-    outline:none;
-    border-radius:6px;
-    font-size:15px;
-}
 
-input{
-    background:#000;
-    color:white;
-    border:1px solid #444;
-}
 
-button{
-    background:#0d6efd;
-    color:white;
-    cursor:pointer;
-    font-weight:bold;
-}
 
-button:hover{
-    opacity:0.8;
-}
 
-.small{
-    font-size:12px;
-    color:#aaa;
-    margin-top:6px;
-}
 
-.credit{
-    margin-top:10px;
-    font-weight:bold;
-    color:#00ff88;
-}
 
-.timer{
-    margin-top:8px;
-    font-size:14px;
-    color:#00ffff;
-}
 
-.hidden{
-    display:none;
-}
-</style>
-</head>
 
-<body>
 
-<div class="box" id="login">
-    <h2>🥔 POTATOHUB 🥔</h2>
-    <p class="small">Whitelist Manager</p>
+  
+🥔 POTATOHUB 🥔
 
-    <input id="keyInput" placeholder="Enter Key">
-    <button onclick="checkKey()">LOGIN</button>
+  
+  Login
+  Copied Link
+  
 
-    <button onclick="copyLink()">COPIED LINK</button>
-    <p class="small">Complete la tarea para obtener key + créditos</p>
 
-    <div class="credit" id="creditText">Créditos: 0</div>
-</div>
+  
+Completa la tarea para obtener créditos
 
-<div class="box hidden" id="panel">
-    <h2>🥔 ACCESS GRANTED 🥔</h2>
-    <p class="credit" id="activeText"></p>
-    <div class="timer" id="timer"></div>
-    <button onclick="logout()">LOGOUT</button>
-</div>
 
-<script>
-const taskLink = "https://direct-link.net/3163684/JOepnUUZmM76";
 
-let credits = Number(localStorage.getItem("credits") || 0);
-let activeUntil = Number(localStorage.getItem("activeUntil") || 0);
-let currentKey = localStorage.getItem("currentKey") || "";
 
-updateCredits();
-checkActive();
 
-function randomKey(){
-    return "PH-" + Math.random().toString(36).substring(2,10).toUpperCase();
-}
+  
+🎉 Acceso Correcto
 
-function copyLink(){
-    navigator.clipboard.writeText(taskLink);
-    alert("Link copiado 🔗\nCompleta la tarea para recibir tu key 😈");
+  
+Créditos: 0
 
-    setTimeout(()=>{
-        giveReward();
-    },5000); 
-}
+  Activar 6 Horas (1 crédito)
+  
 
-function giveReward(){
-    credits++;
-    currentKey = randomKey();
-    localStorage.setItem("credits",credits);
-    localStorage.setItem("currentKey",currentKey);
-    alert("TAREA COMPLETADA 😈🔥\n\nTu KEY es:\n"+currentKey+"\n\n+1 Crédito");
-    updateCredits();
-}
 
-function updateCredits(){
-    document.getElementById("creditText").innerText = "Créditos: "+credits;
-}
 
-function checkKey(){
-    let input = document.getElementById("keyInput").value.trim();
 
-    if(input === currentKey && currentKey !== ""){
-        if(credits >= 2){
-            activateTime();
-            credits -= 2;
-            localStorage.setItem("credits",credits);
-            currentKey="";
-            localStorage.setItem("currentKey","");
-            updateCredits();
-        }else{
-            alert("Necesitas 2 créditos 😐");
-        }
-    }else{
-        alert("Key incorrecta 😐");
-    }
-}
 
-function activateTime(){
-    let sixHours = 6 * 60 * 60 * 1000;
-    activeUntil = Date.now() + sixHours;
-    localStorage.setItem("activeUntil",activeUntil);
-    showPanel();
-}
 
-function checkActive(){
-    if(Date.now() < activeUntil){
-        showPanel();
-    }
-}
 
-function showPanel(){
-    document.getElementById("login").classList.add("hidden");
-    document.getElementById("panel").classList.remove("hidden");
-    updateTimer();
-}
-
-function updateTimer(){
-    let interval = setInterval(()=>{
-        let left = activeUntil - Date.now();
-        if(left <= 0){
-            clearInterval(interval);
-            localStorage.removeItem("activeUntil");
-            location.reload();
-        }else{
-            let h = Math.floor(left/3600000);
-            let m = Math.floor((left%3600000)/60000);
-            let s = Math.floor((left%60000)/1000);
-            document.getElementById("timer").innerText =
-                `Tiempo restante: ${h}h ${m}m ${s}s`;
-        }
-    },1000);
-}
-
-function logout(){
-    location.reload();
-}
-</script>
-
-</body>
-  </html>
